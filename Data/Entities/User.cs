@@ -14,6 +14,7 @@ public class User : BaseEntity
     
     public DateTime CreatedAt { get; set; }
     
+    
     public ICollection<Friendship> Friendships { get; init; } = new List<Friendship>();
     
     public ICollection<GroupMember> GroupMembers { get; init; } = new List<GroupMember>();

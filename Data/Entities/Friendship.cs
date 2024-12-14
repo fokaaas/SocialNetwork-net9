@@ -8,9 +8,10 @@ public class Friendship
     
     public FriendshipStatus Status { get; set; }
     
+    public DateTime CreatedAt { get; set; }
+    
+    
     public User Sender { get; set; }
     
     public User Receiver { get; set; }
-    
-    public DateTime CreatedAt { get; set; }
 }
