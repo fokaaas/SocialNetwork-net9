@@ -5,7 +5,7 @@ public class Friendship
     public int SenderId { get; set; }
     
     public int ReceiverId { get; set; }
-    
+
     public FriendshipStatus Status { get; set; }
     
     public DateTime CreatedAt { get; set; }

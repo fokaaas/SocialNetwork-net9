@@ -17,8 +17,6 @@ public class User : BaseEntity
     
     public ICollection<Friendship> Friendships { get; init; } = new List<Friendship>();
     
-    public ICollection<GroupMember> GroupMembers { get; init; } = new List<GroupMember>();
-    
     public ICollection<Message> Messages { get; init; } = new List<Message>();
     
     public ICollection<ConversationParticipant> ConversationParticipants { get; init; } = new List<ConversationParticipant>();

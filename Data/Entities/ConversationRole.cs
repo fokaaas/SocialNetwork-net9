@@ -1,6 +1,6 @@
 namespace Data.Entities;
 
-public enum GroupRole
+public enum ConversationRole
 {
     Member,
     Admin,
