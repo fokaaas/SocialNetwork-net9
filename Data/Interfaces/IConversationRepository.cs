@@ -8,7 +8,7 @@ public interface IConversationRepository: IRepository<Conversation>
     
     Task DeleteByIdAsync(int id);
     
-    Task<IEnumerable<Conversation>> GetAllWithDetailsAsync();
+    Task<IEnumerable<Conversation>> GetAllWithGroupDetailsAsync();
     
-    Task<Conversation> GetByIdWithDetailsAndMessagesAsync(int id);
+    Task<Conversation> GetByIdWithGroupDetailsAndMessagesAsync(int id);
 }
