@@ -4,7 +4,7 @@ public class Conversation : BaseEntity
 {
     public bool IsGroup { get; set; }
 
-    public int? groupDetailsId { get; set; }
+    public int? GroupDetailsId { get; set; }
 
     public GroupDetails? GroupDetails { get; set; }
 

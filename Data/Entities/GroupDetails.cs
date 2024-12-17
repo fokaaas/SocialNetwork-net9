@@ -7,7 +7,8 @@ public class GroupDetails
     public string Name { get; set; }
 
     public string? Description { get; set; }
-
+    
+    public string? AvatarLink { get; set; }
 
     public Conversation Conversation { get; set; }
 }
