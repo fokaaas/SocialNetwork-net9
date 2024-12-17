@@ -10,7 +10,7 @@ public class User : BaseEntity
 
     public string Password { get; set; }
 
-    public string AvatarLink { get; set; }
+    public string? AvatarLink { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
