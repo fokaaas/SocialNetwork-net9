@@ -74,7 +74,7 @@ public class SocialNetworkDbContext : DbContext
         modelBuilder.Entity<Conversation>()
             .HasOne(c => c.GroupDetails)
             .WithOne(g => g.Conversation)
-            .HasForeignKey<Conversation>(c => c.groupDetailsId)
+            .HasForeignKey<Conversation>(c => c.GroupDetailsId)
             .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Message>()
