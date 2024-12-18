@@ -4,7 +4,7 @@ namespace Business.Interfaces;
 
 public interface IJwtService
 {
-    public string CreateJwtToken(string userId);
+    public string CreateJwtToken(int userId);
 
     public ClaimsPrincipal? VerifyAccessToken(string token);
 }

@@ -18,14 +18,14 @@ public class JwtService : IJwtService
         _issuer = configuration["Jwt:Issuer"];
     }
 
-    public string CreateJwtToken(string userId)
+    public string CreateJwtToken(int userId)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_secret);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, userId) }),
+            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }),
             Issuer = _issuer,
             Expires = DateTime.UtcNow.AddDays(5),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
