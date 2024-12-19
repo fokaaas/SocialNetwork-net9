@@ -11,7 +11,7 @@ namespace Business.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
     
     private readonly IMapper _mapper;
     
@@ -19,9 +19,9 @@ public class AuthService : IAuthService
     
     private readonly IJwtService _jwtService;
     
-    public AuthService(IUserRepository userRepository, IJwtService jwtService, IMapper mapper)
+    public AuthService(IUnitOfWork unitOfWork, IJwtService jwtService, IMapper mapper)
     {
-        _userRepository = userRepository;
+        _unitOfWork = unitOfWork;
         _jwtService = jwtService;
         _mapper = mapper;
         _passwordHasher = new PasswordHasher<User>();
@@ -29,20 +29,20 @@ public class AuthService : IAuthService
 
     public async Task<TokenModel> SignUpAsync(SignUpModel signUpModel)
     {
-        if (await _userRepository.ExistsByEmailAsync(signUpModel.Email))
+        if (await _unitOfWork.UserRepository.ExistsByEmailAsync(signUpModel.Email))
         {
             throw new NetworkException("User with this email already exists");
         }
         
         var user = _mapper.Map<User>(signUpModel);
         user.Password = _passwordHasher.HashPassword(user, signUpModel.Password);
-        await _userRepository.AddAsync(user);
+        await _unitOfWork.UserRepository.AddAsync(user);
         return _mapper.Map<TokenModel>(_jwtService.CreateJwtToken(user.Id));
     }
     
     public async Task<TokenModel> SignInAsync(SignInModel signInModel)
     {
-        var user = await _userRepository.GetByEmailAsync(signInModel.Email);
+        var user = await _unitOfWork.UserRepository.GetByEmailAsync(signInModel.Email);
         if (user == null)
         {
             throw new NetworkException("User with this email does not exist");
@@ -59,7 +59,7 @@ public class AuthService : IAuthService
     
     public async Task<UserModel> GetCurrentUserAsync(int id)
     {
-        var user = await _userRepository.GetByIdAsync(id);
+        var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
         return _mapper.Map<UserModel>(user);
     }
 }

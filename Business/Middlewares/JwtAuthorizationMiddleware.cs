@@ -16,6 +16,14 @@ public class JwtAuthorizationMiddleware
 
     public async Task Invoke(HttpContext context)
     {
+        var endpoint = context.GetEndpoint();
+        
+        if (endpoint?.Metadata.GetMetadata<Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute>() != null)
+        {
+            await _next(context);
+            return;
+        }
+
         var jwtService = context.RequestServices.GetRequiredService<JwtService>();
         var authHeader = context.Request.Headers["Authorization"].FirstOrDefault();
 
@@ -28,7 +36,7 @@ public class JwtAuthorizationMiddleware
             {
                 context.User = claimsPrincipal;
                 var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                context.Items["userId"] = userId;
+                context.Items["UserId"] = userId;
             }
         }
 
