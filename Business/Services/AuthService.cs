@@ -1,10 +1,12 @@
 using AutoMapper;
+using Business.Exceptions;
 using Business.Interfaces;
 using Business.Models.Auth;
 using Business.Models.User;
-using Business.Validation;
 using Data.Entities;
 using Data.Interfaces;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.Services;
@@ -31,12 +33,13 @@ public class AuthService : IAuthService
     {
         if (await _unitOfWork.UserRepository.ExistsByEmailAsync(signUpModel.Email))
         {
-            throw new NetworkException("User with this email already exists");
+            throw new ConflictException("User with this email already exists");
         }
         
         var user = _mapper.Map<User>(signUpModel);
         user.Password = _passwordHasher.HashPassword(user, signUpModel.Password);
         await _unitOfWork.UserRepository.AddAsync(user);
+        await _unitOfWork.SaveAsync();
         return _mapper.Map<TokenModel>(_jwtService.CreateJwtToken(user.Id));
     }
     
@@ -45,13 +48,13 @@ public class AuthService : IAuthService
         var user = await _unitOfWork.UserRepository.GetByEmailAsync(signInModel.Email);
         if (user == null)
         {
-            throw new NetworkException("User with this email does not exist");
+            throw new NotFoundException("User with this email does not exist");
         }
         
         var result = _passwordHasher.VerifyHashedPassword(user, user.Password, signInModel.Password);
         if (result == PasswordVerificationResult.Failed)
         {
-            throw new NetworkException("Invalid password");
+            throw new ConflictException("Invalid password");
         }
         
         return _mapper.Map<TokenModel>(_jwtService.CreateJwtToken(user.Id));

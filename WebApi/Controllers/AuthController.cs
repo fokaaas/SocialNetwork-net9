@@ -19,6 +19,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("sign-up")]
+    [AllowAnonymous]
     public async Task<ActionResult<TokenModel>> SignUp([FromBody] SignUpModel signUpModel)
     {
         if (!ModelState.IsValid)
@@ -31,6 +32,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("sign-in")]
+    [AllowAnonymous]
     public async Task<ActionResult<TokenModel>> SignIn([FromBody] SignInModel signInModel)
     {
         if (!ModelState.IsValid)
@@ -42,8 +44,7 @@ public class AuthController : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("me")]
-    [AllowAnonymous]
+    [HttpGet("me")]
     public async Task<ActionResult<UserModel>> Me()
     {
         var userId = HttpContext.Items["UserId"].ToString();

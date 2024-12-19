@@ -28,6 +28,10 @@ public class SocialNetworkDbContext : DbContext
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
+        
+        modelBuilder.Entity<User>()
+            .Property(cp => cp.CreatedAt)
+            .HasDefaultValueSql("GETDATE()");
 
         modelBuilder.Entity<ConversationParticipant>()
             .Property(cp => cp.Role)

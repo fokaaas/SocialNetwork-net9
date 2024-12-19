@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Business.Exceptions;
 using Business.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -55,7 +56,7 @@ public class JwtService : IJwtService
         }
         catch
         {
-            return null;
+            throw new UnauthorizedException("Invalid token");
         }
     }
 }

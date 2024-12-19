@@ -10,6 +10,11 @@ public class AutomapperProfile : Profile
 {
     public AutomapperProfile()
     {
+        CreateMap<SignUpModel, User>()
+            .ForMember(u => u.Id, opt => opt.Ignore())
+            .ForMember(u => u.CreatedAt, opt => opt.Ignore())
+            .ForMember(u => u.Password, opt => opt.Ignore());
+        
         CreateMap<string, TokenModel>()
             .ForMember(tm => tm.Token, opt => opt.MapFrom(s => s));
 
