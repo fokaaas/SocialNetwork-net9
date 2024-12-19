@@ -1,6 +1,6 @@
 namespace Data.Entities;
 
-public class GroupDetails
+public class GroupDetails: BaseEntity
 {
     public int ConversationId { get; set; }
 

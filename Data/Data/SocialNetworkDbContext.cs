@@ -60,13 +60,15 @@ public class SocialNetworkDbContext : DbContext
 
         modelBuilder.Entity<Friendship>()
             .HasOne(f => f.Sender)
-            .WithMany(s => s.Friendships)
-            .HasForeignKey(f => f.SenderId);
+            .WithMany(s => s.FriendshipsAsSender)
+            .HasForeignKey(f => f.SenderId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Friendship>()
             .HasOne(f => f.Receiver)
-            .WithMany(s => s.Friendships)
-            .HasForeignKey(f => f.ReceiverId);
+            .WithMany(s => s.FriendshipsAsReceiver)
+            .HasForeignKey(f => f.ReceiverId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Friendship>()
             .HasKey(f => new { f.SenderId, f.ReceiverId });
