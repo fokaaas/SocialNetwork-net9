@@ -47,4 +47,12 @@ public class FriendshipRepository : IFriendshipRepository
     {
         _context.Friendships.Update(entity);
     }
+    
+    public async Task<IEnumerable<Friendship>> GetSenderFriendshipsAsync(int senderId)
+    {
+        return await _context.Friendships
+            .Where(f => f.SenderId == senderId)
+            .Include(f => f.Receiver)
+            .ToListAsync();
+    }
 }

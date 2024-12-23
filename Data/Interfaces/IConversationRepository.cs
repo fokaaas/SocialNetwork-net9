@@ -4,11 +4,9 @@ namespace Data.Interfaces;
 
 public interface IConversationRepository: IRepository<Conversation>
 {
-    Task<Conversation> GetByIdAsync(int id);
-    
     Task DeleteByIdAsync(int id);
     
-    Task<IEnumerable<Conversation>> GetAllWithGroupDetailsAsync();
+    Task<IEnumerable<Conversation>> GetManyByUserIdAsync(int userId);
     
-    Task<Conversation> GetByIdWithGroupDetailsAndMessagesAsync(int id);
+    Task<Conversation> GetByIdAsync(int id);
 }

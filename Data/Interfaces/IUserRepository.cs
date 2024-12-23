@@ -8,6 +8,8 @@ public interface IUserRepository: IRepository<User>
     
     Task DeleteByIdAsync(int id);
     
+    Task<IEnumerable<User>> GetAllAsync();
+    
     Task<bool> ExistsByEmailAsync(string email);
     
     Task<bool> IsEmailInUseAsync(string email, int userId);

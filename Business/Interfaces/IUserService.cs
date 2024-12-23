@@ -8,6 +8,8 @@ public interface IUserService
     
     Task<UsersModel> GetAllAsync();
     
+    Task UpdateAsync(int id, UserUpdateModel userModel);
+    
     Task CreateFriendshipAsync(int userId, int friendId);
     
     Task<UserFriendshipsModel> GetFriendsAsync(int userId);

@@ -16,12 +16,13 @@ public class ConversationParticipantRepository : IConversationParticipantReposit
     
     public async Task<ConversationParticipant> GetByIdAsync(int conversationId, int participantId)
     {
-        return await _context.ConversationParticipants.FindAsync(conversationId, participantId);
+        return _context.ConversationParticipants
+            .FirstOrDefault(cp => cp.ConversationId == conversationId && cp.UserId == participantId);
     }
     
     public async Task DeleteByIdAsync(int conversationId, int participantId)
     {
-        var conversationParticipant = await _context.ConversationParticipants.FindAsync(conversationId, participantId);
+        var conversationParticipant = await GetByIdAsync(conversationId, participantId);
         if (conversationParticipant is not null)
         {
             _context.ConversationParticipants.Remove(conversationParticipant);
@@ -46,5 +47,10 @@ public class ConversationParticipantRepository : IConversationParticipantReposit
     public void Update(ConversationParticipant entity)
     {
         _context.ConversationParticipants.Update(entity);
+    }
+    
+    public async Task<IEnumerable<ConversationParticipant>> GetManyByConversationId(int conversationId)
+    {
+        return _context.ConversationParticipants.Where(cp => cp.ConversationId == conversationId).ToList();
     }
 }

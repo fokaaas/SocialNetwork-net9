@@ -12,10 +12,13 @@ namespace WebApi.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+
+    private readonly IUserService _userService;
     
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, IUserService userService)
     {
         _authService = authService;
+        _userService = userService;
     }
     
     [HttpPost("sign-up")]
@@ -48,7 +51,7 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<UserModel>> Me()
     {
         var userId = HttpContext.Items["UserId"].ToString();
-        var result = await _authService.GetCurrentUserAsync(Convert.ToInt32(userId));
+        var result = await _userService.GetByIdAsync(Convert.ToInt32(userId));
         return Ok(result);
     }
 }

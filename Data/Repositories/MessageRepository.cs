@@ -16,7 +16,9 @@ public class MessageRepository : IMessageRepository
     
     public async Task<Message> GetByIdAsync(int id)
     {
-        return await _context.Messages.FindAsync(id);
+        return await _context.Messages
+            .Include(m => m.Sender)
+            .FirstOrDefaultAsync(m => m.Id == id);
     }
     
     public async Task DeleteByIdAsync(int id)

@@ -49,10 +49,20 @@ public class GlobalExceptionHandlerMiddleware
                 await context.Response.WriteAsJsonAsync(new { StatusCode = context.Response.StatusCode, Message = unauthorizedException.Message });
                 _logger.LogError(unauthorizedException.Message);
                 break;
+            case ForbiddenException forbiddenException:
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await context.Response.WriteAsJsonAsync(new { StatusCode = context.Response.StatusCode, Message = forbiddenException.Message });
+                _logger.LogError(forbiddenException.Message);
+                break;
+            case BadRequestException badRequestException:
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await context.Response.WriteAsJsonAsync(new { StatusCode = context.Response.StatusCode, Message = badRequestException.Message });
+                _logger.LogError(badRequestException.Message);
+                break;
             default:
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await context.Response.WriteAsJsonAsync(new { StatusCode = context.Response.StatusCode, Message = "Internal Server Error." });
-                _logger.LogError(exception.Message);
+                _logger.LogError(exception.ToString());
                 break;
         }
     }

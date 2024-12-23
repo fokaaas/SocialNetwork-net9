@@ -59,10 +59,4 @@ public class AuthService : IAuthService
         
         return _mapper.Map<TokenModel>(_jwtService.CreateJwtToken(user.Id));
     }
-    
-    public async Task<UserModel> GetCurrentUserAsync(int id)
-    {
-        var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
-        return _mapper.Map<UserModel>(user);
-    }
 }

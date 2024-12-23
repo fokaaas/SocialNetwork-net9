@@ -18,6 +18,9 @@ builder.Services.AddDbContext<SocialNetworkDbContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IConversationService, ConversationService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 builder.Services.AddAutoMapper(typeof(AutomapperProfile));
 

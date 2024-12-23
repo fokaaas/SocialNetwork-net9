@@ -7,4 +7,6 @@ public interface IConversationParticipantRepository : IRepository<ConversationPa
     Task<ConversationParticipant> GetByIdAsync(int conversationId, int participantId);
     
     Task DeleteByIdAsync(int conversationId, int participantId);
+
+    Task<IEnumerable<ConversationParticipant>> GetManyByConversationId(int conversationId);
 }

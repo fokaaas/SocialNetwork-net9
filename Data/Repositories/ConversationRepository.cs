@@ -15,11 +15,6 @@ public class ConversationRepository : IConversationRepository
         _context = context;
     }
     
-    public async Task<Conversation> GetByIdAsync(int id)
-    {
-        return await _context.Conversations.FindAsync(id);
-    }
-    
     public async Task DeleteByIdAsync(int id)
     {
         var conversation = await _context.Conversations.FindAsync(id);
@@ -29,19 +24,30 @@ public class ConversationRepository : IConversationRepository
         }
     }
     
-    public async Task<IEnumerable<Conversation>> GetAllWithGroupDetailsAsync()
+    public async Task<IEnumerable<Conversation>> GetManyByUserIdAsync(int userId)
     {
         return await _context.Conversations
             .Include(c => c.GroupDetails)
+            .Include(c => c.Participants)
+                .ThenInclude(p => p.User)
+            .Where(c => c.Participants.Any(p => p.UserId == userId))
             .ToListAsync();
     }
     
-    public async Task<Conversation> GetByIdWithGroupDetailsAndMessagesAsync(int id)
+    public async Task<Conversation> GetByIdAsync(int id)
     {
-        return await _context.Conversations
+         var conversations = await _context.Conversations
             .Include(c => c.GroupDetails)
+            .Include(c => c.Participants)
+                .ThenInclude(p => p.User)
             .Include(c => c.Messages)
+                .ThenInclude(m => m.Sender)
             .FirstOrDefaultAsync(c => c.Id == id);
+         
+        conversations.Messages = conversations.Messages
+            .OrderByDescending(m => m.CreatedAt).ToList();
+
+        return conversations;
     }
     
     public async Task AddAsync(Conversation entity)

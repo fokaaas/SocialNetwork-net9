@@ -1,5 +1,6 @@
 using AutoMapper;
 using Business.Models.Auth;
+using Business.Models.Conversation;
 using Business.Models.Message;
 using Business.Models.User;
 using Data.Entities;
@@ -23,7 +24,7 @@ public class AutomapperProfile : Profile
 
         CreateMap<User, ShortUserModel>();
         
-        CreateMap<User, UsersModel>()
+        CreateMap<IEnumerable<User>, UsersModel>()
             .ForMember(um => um.Users, opt => opt.MapFrom(u => u));
 
         CreateMap<Friendship, UserFriendshipModel>()
@@ -32,11 +33,92 @@ public class AutomapperProfile : Profile
             .ForMember(ufm => ufm.Surname, opt => opt.MapFrom(f => f.Receiver.Surname))
             .ForMember(ufm => ufm.AvatarLink, opt => opt.MapFrom(f => f.Receiver.AvatarLink));
         
-        CreateMap<Friendship, UserFriendshipsModel>()
+        CreateMap<IEnumerable<Friendship>, UserFriendshipsModel>()
             .ForMember(ufm => ufm.Friendships, opt => opt.MapFrom(f => f));
         
         CreateMap<Message, MessageModel>()
             .ForMember(mm => mm.Name, opt => opt.MapFrom(m => m.Sender.Name))
             .ForMember(mm => mm.Surname, opt => opt.MapFrom(m => m.Sender.Surname));
+        
+        CreateMap<IEnumerable<Conversation>, ConversationsModel>()
+            .ForMember(cm => cm.Conversations, opt => opt.MapFrom((src, dest, _, context) =>
+            {
+                var userId = (int)context.Items["UserId"];
+                return src.Select(c => new ShortConversationModel
+                {
+                    Id = c.Id,
+                    Name = c.IsGroup
+                        ? c.GroupDetails.Name
+                        : c.Participants.First(p => p.UserId != userId).User.Name,
+                    AvatarLink = c.IsGroup
+                        ? c.GroupDetails.AvatarLink
+                        : c.Participants.First(p => p.UserId != userId).User.AvatarLink,
+                    IsGroup = c.IsGroup
+                });
+            }));
+        
+        CreateMap<Conversation, ConversationModel>()
+            .ForMember(dest => dest.Name, opt =>
+                opt.MapFrom((src, dest, _, context) =>
+                {
+                    var userId = (int)context.Items["UserId"];
+                    return src.IsGroup
+                        ? src.GroupDetails.Name
+                        : src.Participants.FirstOrDefault(p => p.UserId != userId).User.Name;
+                }))
+            .ForMember(dest => dest.Description, opt =>
+                opt.MapFrom(src => src.IsGroup ? src.GroupDetails.Description : null))
+            .ForMember(dest => dest.AvatarLink, opt =>
+                opt.MapFrom((src, dest, _, context) =>
+                {
+                    var userId = (int)context.Items["UserId"];
+                    return src.IsGroup
+                        ? src.GroupDetails.AvatarLink
+                        : src.Participants.FirstOrDefault(p => p.UserId != userId).User.AvatarLink;
+                }))
+            .ForMember(dest => dest.Messages, opt =>
+                opt.MapFrom(src => src.Messages))
+            .ForMember(dest => dest.Participants, opt =>
+                opt.MapFrom(src => src.Participants));
+
+        CreateMap<Message, ConversationMessageModel>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Sender.Name))
+            .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.Sender.Surname));
+        
+        CreateMap<Message, MessageModel>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Sender.Name))
+            .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.Sender.Surname));
+
+        CreateMap<ConversationParticipant, ConversationUserModel>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.User.Name))
+            .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.User.Surname))
+            .ForMember(dest => dest.AvatarLink, opt => opt.MapFrom(src => src.User.AvatarLink))
+            .ForMember(dest => dest.JoinedAt, opt => opt.MapFrom(src => src.User.CreatedAt));
+        
+        CreateMap<UserUpdateModel, User>()
+            .ForAllMembers(opt =>
+                opt.Condition((src, dest, srcMember) => srcMember != null));
+        
+        CreateMap<UserFriendshipUpdateModel, Friendship>()
+            .ForAllMembers(opt =>
+                opt.Condition((src, dest, srcMember) => srcMember != null));
+
+        CreateMap<ConversationCreateModel, Conversation>()
+            .ForMember(dest => dest.IsGroup, opt => opt.MapFrom(src => src.GroupDetails != null))
+            .ForMember(dest => dest.GroupDetails, opt => opt.MapFrom(src => src.GroupDetails));
+        
+        CreateMap<ConversationCreateGroupDetailsModel, GroupDetails>()
+            .ForMember(dest => dest.ConversationId, opt => opt.Ignore());
+        
+        CreateMap<ConversationParticipantUpdateModel, ConversationParticipant>()
+            .ForAllMembers(opt =>
+                opt.Condition((src, dest, srcMember) => srcMember != null));
+        
+        CreateMap<MessageCreateModel, Message>()
+            .ForMember(m => m.CreatedAt, opt => opt.Ignore());
+        
+        CreateMap<MessageUpdateModel, Message>()
+            .ForAllMembers(opt =>
+                opt.Condition((src, dest, srcMember) => srcMember != null));
     }
 }

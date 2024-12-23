@@ -8,7 +8,7 @@ public class Conversation : BaseEntity
 
     public GroupDetails? GroupDetails { get; set; }
 
-    public ICollection<Message> Messages { get; init; } = new List<Message>();
+    public ICollection<Message> Messages { get; set; } = new List<Message>();
 
-    public ICollection<ConversationParticipant> Participants { get; init; } = new List<ConversationParticipant>();
+    public ICollection<ConversationParticipant> Participants { get; set; } = new List<ConversationParticipant>();
 }
