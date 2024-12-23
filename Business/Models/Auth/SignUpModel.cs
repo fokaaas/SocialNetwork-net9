@@ -18,7 +18,8 @@ public class SignUpModel
 
     [Required(ErrorMessage = "Password is required")]
     [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters long")]
-    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d).+$", ErrorMessage = "Password must contain at least one uppercase letter and one number")]
+    [RegularExpression(@"^(?=.*[A-Z])(?=.*\d).+$",
+        ErrorMessage = "Password must contain at least one uppercase letter and one number")]
     public string Password { get; set; }
 
     [Url(ErrorMessage = "Invalid URL format for avatar link")]

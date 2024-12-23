@@ -10,8 +10,8 @@ namespace Business.Services;
 
 public class JwtService : IJwtService
 {
-    private readonly string _secret;
     private readonly string _issuer;
+    private readonly string _secret;
 
     public JwtService(IConfiguration configuration)
     {
@@ -29,7 +29,8 @@ public class JwtService : IJwtService
             Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, userId.ToString()) }),
             Issuer = _issuer,
             Expires = DateTime.UtcNow.AddDays(5),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);

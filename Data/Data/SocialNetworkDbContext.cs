@@ -24,11 +24,11 @@ public class SocialNetworkDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
-        
+
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
-        
+
         modelBuilder.Entity<User>()
             .Property(cp => cp.CreatedAt)
             .HasDefaultValueSql("GETDATE()");
