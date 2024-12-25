@@ -8,7 +8,7 @@ public class Message : BaseEntity
 
     public string Content { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
     public User Sender { get; set; }
 

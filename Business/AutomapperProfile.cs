@@ -28,10 +28,12 @@ public class AutomapperProfile : Profile
             .ForMember(um => um.Users, opt => opt.MapFrom(u => u));
 
         CreateMap<Friendship, UserFriendshipModel>()
-            .ForMember(ufm => ufm.UserId, opt => opt.MapFrom(f => f.Receiver.Id))
-            .ForMember(ufm => ufm.Name, opt => opt.MapFrom(f => f.Receiver.Name))
-            .ForMember(ufm => ufm.Surname, opt => opt.MapFrom(f => f.Receiver.Surname))
-            .ForMember(ufm => ufm.AvatarLink, opt => opt.MapFrom(f => f.Receiver.AvatarLink));
+            .ForMember(ufm => ufm.ReceiverName, opt => opt.MapFrom(f => f.Receiver.Name))
+            .ForMember(ufm => ufm.ReceiverSurname, opt => opt.MapFrom(f => f.Receiver.Surname))
+            .ForMember(ufm => ufm.ReceiverAvatarLink, opt => opt.MapFrom(f => f.Receiver.AvatarLink))
+            .ForMember(ufm => ufm.SenderName, opt => opt.MapFrom(f => f.Sender.Name))
+            .ForMember(ufm => ufm.SenderSurname, opt => opt.MapFrom(f => f.Sender.Surname))
+            .ForMember(ufm => ufm.SenderAvatarLink, opt => opt.MapFrom(f => f.Sender.AvatarLink));
 
         CreateMap<IEnumerable<Friendship>, UserFriendshipsModel>()
             .ForMember(ufm => ufm.Friendships, opt => opt.MapFrom(f => f));

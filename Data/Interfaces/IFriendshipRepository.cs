@@ -8,5 +8,5 @@ public interface IFriendshipRepository : IRepository<Friendship>
 
     Task DeleteByIdAsync(int senderId, int receiverId);
 
-    Task<IEnumerable<Friendship>> GetSenderFriendshipsAsync(int senderId);
+    Task<IEnumerable<Friendship>> GetFriendshipsAsync(int id);
 }

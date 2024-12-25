@@ -44,10 +44,10 @@ public class UsersController : ControllerBase
         return StatusCode(StatusCodes.Status201Created);
     }
 
-    [HttpGet("{senderId}/friendships")]
-    public async Task<ActionResult<UserFriendshipsModel>> GetFriendships(int senderId)
+    [HttpGet("{id}/friendships")]
+    public async Task<ActionResult<UserFriendshipsModel>> GetFriendships(int id)
     {
-        var result = await _userService.GetFriendsAsync(senderId);
+        var result = await _userService.GetFriendsAsync(id);
         return Ok(result);
     }
 

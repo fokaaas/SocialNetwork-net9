@@ -54,7 +54,7 @@ public class UserService : IUserService
 
     public async Task<UserFriendshipsModel> GetFriendsAsync(int userId)
     {
-        var friends = await _unitOfWork.FriendshipRepository.GetSenderFriendshipsAsync(userId);
+        var friends = await _unitOfWork.FriendshipRepository.GetFriendshipsAsync(userId);
         return _mapper.Map<UserFriendshipsModel>(friends);
     }
 

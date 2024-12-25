@@ -40,11 +40,12 @@ public class FriendshipRepository : IFriendshipRepository
         _context.Friendships.Update(entity);
     }
 
-    public async Task<IEnumerable<Friendship>> GetSenderFriendshipsAsync(int senderId)
+    public async Task<IEnumerable<Friendship>> GetFriendshipsAsync(int id)
     {
         return await _context.Friendships
-            .Where(f => f.SenderId == senderId)
+            .Where(f => f.SenderId == id || f.ReceiverId == id)
             .Include(f => f.Receiver)
+            .Include(f => f.Sender)
             .ToListAsync();
     }
 

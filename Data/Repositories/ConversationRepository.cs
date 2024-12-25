@@ -41,7 +41,7 @@ public class ConversationRepository : IConversationRepository
             .FirstOrDefaultAsync(c => c.Id == id);
 
         conversations.Messages = conversations.Messages
-            .OrderByDescending(m => m.CreatedAt).ToList();
+            .OrderBy(m => m.CreatedAt).ToList();
 
         return conversations;
     }

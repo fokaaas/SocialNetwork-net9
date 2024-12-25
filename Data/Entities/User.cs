@@ -12,7 +12,7 @@ public class User : BaseEntity
 
     public string? AvatarLink { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
 
     public ICollection<Friendship> FriendshipsAsSender { get; init; } = new List<Friendship>();

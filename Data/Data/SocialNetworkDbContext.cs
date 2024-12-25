@@ -31,7 +31,7 @@ public class SocialNetworkDbContext : DbContext
 
         modelBuilder.Entity<User>()
             .Property(cp => cp.CreatedAt)
-            .HasDefaultValueSql("GETDATE()");
+            .HasDefaultValueSql("SYSDATETIME()");
 
         modelBuilder.Entity<ConversationParticipant>()
             .Property(cp => cp.Role)
@@ -39,7 +39,7 @@ public class SocialNetworkDbContext : DbContext
 
         modelBuilder.Entity<ConversationParticipant>()
             .Property(cp => cp.CreatedAt)
-            .HasDefaultValueSql("GETDATE()");
+            .HasDefaultValueSql("SYSDATETIME()");
 
         modelBuilder.Entity<ConversationParticipant>()
             .HasOne(cp => cp.User)
@@ -60,7 +60,7 @@ public class SocialNetworkDbContext : DbContext
 
         modelBuilder.Entity<Friendship>()
             .Property(f => f.CreatedAt)
-            .HasDefaultValueSql("GETDATE()");
+            .HasDefaultValueSql("SYSDATETIME()");
 
         modelBuilder.Entity<Friendship>()
             .HasOne(f => f.Sender)
@@ -85,7 +85,7 @@ public class SocialNetworkDbContext : DbContext
 
         modelBuilder.Entity<Message>()
             .Property(m => m.CreatedAt)
-            .HasDefaultValueSql("GETDATE()");
+            .HasDefaultValueSql("SYSDATETIME()");
 
         modelBuilder.Entity<Message>()
             .HasOne(m => m.Sender)

@@ -21,6 +21,7 @@ public class MessageService : IMessageService
     public async Task CreateAsync(int userId, MessageCreateModel model)
     {
         var message = _mapper.Map<Message>(model);
+        Console.WriteLine(message.CreatedAt);
         message.SenderId = userId;
         await _unitOfWork.MessageRepository.AddAsync(message);
         await _unitOfWork.SaveAsync();
